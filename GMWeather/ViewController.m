@@ -46,6 +46,23 @@
     [_searchTextField addTarget:self
                   action:@selector(textFieldDidChange:)
         forControlEvents:UIControlEventEditingChanged];
+    
+    UIView *aContainerView = [self viewWithContent:self.infoView];
+    UIView *bContainerView = [self viewWithContent:self.mapView];
+    
+    [self.view addSubview:aContainerView];
+    [self.view addSubview:bContainerView];
+    
+    self.aContainerView = aContainerView;
+    self.bContainerView = bContainerView;
+    
+    CGSize viewSize = self.view.bounds.size;
+    
+    if (viewSize.width > viewSize.height) {
+        [NSLayoutConstraint activateConstraints:self.horizontalOrientationConstraints];
+    } else {
+        [NSLayoutConstraint activateConstraints:self.verticalOrientationConstraints];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -156,6 +173,11 @@ didLongPressAtCoordinate:(CLLocationCoordinate2D)coordinate {
     }
 }
 
+-(IBAction)Hidekeyboard
+{
+    [_searchTextField resignFirstResponder];
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
     [textField resignFirstResponder];
     return YES;
@@ -184,16 +206,102 @@ didLongPressAtCoordinate:(CLLocationCoordinate2D)coordinate {
                                                       zoom:9.0];
 }
 
-/*-(void)setupConstraints{
-    NSLayoutConstraint *leftButtonXConstraint = [NSLayoutConstraint
-                                                 constraintWithItem:self.mapView attribute:NSLayoutAttributeCenterX
-                                                 relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.view attribute:
-                                                 NSLayoutAttributeCenterX multiplier:1.0 constant:-60.0f];
-    NSLayoutConstraint *leftButtonYConstraint = [NSLayoutConstraint
-                                                 constraintWithItem:self.mapView attribute:NSLayoutAttributeCenterY
-                                                 relatedBy:NSLayoutRelationEqual toItem:self.view attribute:
-                                                 NSLayoutAttributeCenterY multiplier:1.0f constant:0.0f];
-    [self.view addConstraints:@[ leftButtonXConstraint,
-                                 leftButtonYConstraint]];
-}*/
+- (NSArray *)horizontalOrientationConstraints
+{
+    if (!_horizontalOrientationConstraints) {
+        NSLayoutConstraint *equalWidthConstraints = [NSLayoutConstraint constraintWithItem:self.aContainerView
+                                                                                 attribute:NSLayoutAttributeWidth
+                                                                                 relatedBy:NSLayoutRelationEqual
+                                                                                    toItem:self.bContainerView
+                                                                                 attribute:NSLayoutAttributeWidth
+                                                                                multiplier:1.0
+                                                                                  constant:0];
+        
+        NSArray *vConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[bContainerView][aContainerView]|"
+                                                                        options:NSLayoutFormatAlignAllTop | NSLayoutFormatAlignAllBottom
+                                                                        metrics:nil views:@{@"aContainerView": self.aContainerView, @"bContainerView": self.bContainerView}];
+        NSArray *hConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[aContainerView]|"
+                                                                        options:0
+                                                                        metrics:nil
+                                                                          views:@{@"aContainerView": self.aContainerView}];
+        NSArray *constraints = [vConstraints arrayByAddingObjectsFromArray:hConstraints];
+        _horizontalOrientationConstraints = [constraints arrayByAddingObject:equalWidthConstraints];
+        
+    }
+    return _horizontalOrientationConstraints;
+}
+
+
+- (NSArray *)verticalOrientationConstraints
+{
+    if (!_verticalOrientationConstraints) {
+        NSLayoutConstraint *equalHeightConstraints = [NSLayoutConstraint constraintWithItem:self.aContainerView
+                                                                                  attribute:NSLayoutAttributeHeight
+                                                                                  relatedBy:NSLayoutRelationEqual
+                                                                                     toItem:self.bContainerView
+                                                                                  attribute:NSLayoutAttributeHeight
+                                                                                 multiplier:1.0
+                                                                                   constant:0];
+        
+        
+        NSArray *vConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[aContainerView][bContainerView]|"
+                                                                        options:NSLayoutFormatAlignAllLeft | NSLayoutFormatAlignAllRight
+                                                                        metrics:nil views:@{@"aContainerView": self.aContainerView, @"bContainerView": self.bContainerView}];
+        NSArray *hConstraints = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[aContainerView]|"
+                                                                        options:0
+                                                                        metrics:nil
+                                                                          views:@{@"aContainerView": self.aContainerView}];
+        NSArray *constraints = [vConstraints arrayByAddingObjectsFromArray:hConstraints];
+        _verticalOrientationConstraints = [constraints arrayByAddingObject:equalHeightConstraints];
+        
+    }
+    return _verticalOrientationConstraints;
+}
+
+- (UIView *)viewWithContent:(UIView *)content{
+    UIView *aContainerView = [[UIView alloc] init];
+    aContainerView.backgroundColor = [UIColor whiteColor];
+    aContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    UIView *aView;
+    if(content == NULL)
+    aView = [[UIView alloc] init];
+    else
+        aView = content;
+    aView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [aContainerView addSubview:aView];
+    
+    NSString *hConstraintsFormat = @"V:|-1-[view]-1-|";
+    NSString *vConstraintsFormat = @"H:|-1-[view]-1-|";
+    
+    [aContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:hConstraintsFormat
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:@{@"view": aView}]];
+    [aContainerView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:vConstraintsFormat
+                                                                           options:0
+                                                                           metrics:nil
+                                                                             views:@{@"view": aView}]];
+    
+    return aContainerView;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator{
+    NSArray *constraintsToDeactivate;
+    NSArray *constraintsToActivate;
+    
+    if (size.width > size.height) {
+        constraintsToActivate = self.horizontalOrientationConstraints;
+        constraintsToDeactivate = self.verticalOrientationConstraints;
+    } else {
+        constraintsToActivate = self.verticalOrientationConstraints;
+        constraintsToDeactivate = self.horizontalOrientationConstraints;
+    }
+    
+    [NSLayoutConstraint deactivateConstraints:constraintsToDeactivate];
+    [NSLayoutConstraint activateConstraints:constraintsToActivate];
+    [self.view layoutIfNeeded];
+}
+
 @end

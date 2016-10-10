@@ -16,6 +16,7 @@
     CLLocationManager *locationManager;
 }
 @property (nonatomic, weak) IBOutlet GMSMapView *mapView;
+@property (weak, nonatomic) IBOutlet UIView *infoView;
 @property (weak, nonatomic) IBOutlet UITextField *searchTextField;
 @property (weak, nonatomic) IBOutlet UIButton *CurentLocationButton;
 @property (weak, nonatomic) IBOutlet UILabel *cityLabel;
@@ -27,6 +28,12 @@
 @property (nonatomic, strong) GMSMarker *marker;
 @property (nonatomic, strong) LocationPickerViewController *locationPicker;
 @property(nonatomic,strong)UIPopoverPresentationController *locationPopover;
+
+@property (nonatomic, weak) UIView *aContainerView;
+@property (nonatomic, weak) UIView *bContainerView;
+
+@property (nonatomic, strong) NSArray *horizontalOrientationConstraints;
+@property (nonatomic, strong) NSArray *verticalOrientationConstraints;
 
 @end
 
