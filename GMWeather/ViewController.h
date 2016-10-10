@@ -10,8 +10,9 @@
 @import GoogleMaps;
 #import <CoreLocation/CoreLocation.h>
 #import "LocationPickerViewController.h"
+#import "Network.h"
 
-@interface ViewController : UIViewController<GMSMapViewDelegate,CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate, LocationPickerDelegate>{
+@interface ViewController : UIViewController<GMSMapViewDelegate,CLLocationManagerDelegate, UIPopoverPresentationControllerDelegate, LocationPickerDelegate,NetworkLocationDelegate>{
     CLLocationManager *locationManager;
 }
 @property (nonatomic, weak) IBOutlet GMSMapView *mapView;

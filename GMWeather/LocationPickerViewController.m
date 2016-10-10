@@ -7,27 +7,27 @@
 //
 
 #import "LocationPickerViewController.h"
+#import "Network.h"
 
 @implementation LocationPickerViewController
 
 #pragma mark - Init
--(id)initWithStyle:(UITableViewStyle)style
-{
+-(id)initWithStyle:(UITableViewStyle)style{
     if ([super initWithStyle:style] != nil) {
         _locations = [NSMutableArray array];
         self.clearsSelectionOnViewWillAppear = NO;
+        NetworkManager* nm = [NetworkManager sharedManager];
+        nm.pickerDelegate = self;
     }
     return self;
 }
 
 #pragma mark - View Lifecycle
-- (void)viewDidLoad
-{
+- (void)viewDidLoad{
     [super viewDidLoad];
 }
 
-- (void)didReceiveMemoryWarning
-{
+- (void)didReceiveMemoryWarning{
     [super didReceiveMemoryWarning];
 }
 
@@ -52,36 +52,13 @@
     return cell;
 }
 
-- (NSURL*)validUrl:(NSString*)url {
-    url = [url stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    url = [url stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    return [NSURL URLWithString:url];
-}
-
--(void) getAutocomplete: (NSString *) searchText{
-    NSString *url = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=(cities)&key=%@",searchText,kGOOGLE_API_KEY];
-    NSURL *googleRequestURL=[self validUrl:url];
-    dispatch_async(kBgQueue, ^{
-        NSData* data = [NSData dataWithContentsOfURL: googleRequestURL];
-        [self performSelectorOnMainThread:@selector(fetchedData:) withObject:data waitUntilDone:YES];
-    });
-}
-
-- (void)fetchedData:(NSData *)responseData {
-    NSError* error;
-    NSDictionary* json = [NSJSONSerialization
-                          JSONObjectWithData:responseData
-                          
-                          options:kNilOptions
-                          error:&error];
-    _locations = [json objectForKey:@"predictions"];
+-(void)pasteAutocomplete:(NSMutableArray *)autocomplete{
+    _locations = autocomplete;
     [self.tableView reloadData];
 }
 
-
 #pragma mark - Table view delegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     if (_delegate != nil) {
         [_delegate selectedLocation:[_locations objectAtIndex:indexPath.row]];
     }

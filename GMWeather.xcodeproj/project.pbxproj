@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E543EF71DABBC3F0089FACF /* Network.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E543EF61DABBC3F0089FACF /* Network.m */; };
 		1E5909DC1DAA962300967A28 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E5909DB1DAA962300967A28 /* CoreLocation.framework */; };
 		1E5909DF1DAABB9C00967A28 /* LocationPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E5909DE1DAABB9C00967A28 /* LocationPickerViewController.m */; };
 		1EBFD7DA1DA7A1DB00E4B150 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 1EBFD7D91DA7A1DB00E4B150 /* main.m */; };
@@ -19,6 +20,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E543EF41DABBB500089FACF /* Definations.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Definations.h; sourceTree = "<group>"; };
+		1E543EF51DABBC3F0089FACF /* Network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Network.h; sourceTree = "<group>"; };
+		1E543EF61DABBC3F0089FACF /* Network.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Network.m; sourceTree = "<group>"; };
 		1E5909DB1DAA962300967A28 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		1E5909DD1DAABB9C00967A28 /* LocationPickerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationPickerViewController.h; sourceTree = "<group>"; };
 		1E5909DE1DAABB9C00967A28 /* LocationPickerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationPickerViewController.m; sourceTree = "<group>"; };
@@ -77,6 +81,9 @@
 				1EBFD7DF1DA7A1DB00E4B150 /* ViewController.m */,
 				1E5909DD1DAABB9C00967A28 /* LocationPickerViewController.h */,
 				1E5909DE1DAABB9C00967A28 /* LocationPickerViewController.m */,
+				1E543EF51DABBC3F0089FACF /* Network.h */,
+				1E543EF61DABBC3F0089FACF /* Network.m */,
+				1E543EF41DABBB500089FACF /* Definations.h */,
 				1EBFD7E11DA7A1DB00E4B150 /* Main.storyboard */,
 				1EBFD7E41DA7A1DB00E4B150 /* Assets.xcassets */,
 				1EBFD7E61DA7A1DB00E4B150 /* LaunchScreen.storyboard */,
@@ -234,6 +241,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EBFD7E01DA7A1DB00E4B150 /* ViewController.m in Sources */,
+				1E543EF71DABBC3F0089FACF /* Network.m in Sources */,
 				1E5909DF1DAABB9C00967A28 /* LocationPickerViewController.m in Sources */,
 				1EBFD7DD1DA7A1DB00E4B150 /* AppDelegate.m in Sources */,
 				1EBFD7DA1DA7A1DB00E4B150 /* main.m in Sources */,
